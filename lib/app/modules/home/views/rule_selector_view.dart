@@ -11,31 +11,45 @@ class RuleSelectorView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: HighlightRule.values.map((rule) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: Obx(() {
-              final isSelected = controller.currentRule.value == rule;
-              return ChoiceChip(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+      ),
+      child: Obx(() {
+        final currentRule = controller.currentRule.value;
+        return ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          itemCount: HighlightRule.values.length,
+          itemBuilder: (context, index) {
+            final rule = HighlightRule.values[index];
+            final isSelected = currentRule == rule;
+            
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
                 label: Text(getRuleName(rule)),
                 selected: isSelected,
                 onSelected: (selected) {
-                  if (selected) controller.setRule(rule);
+                  if (selected) {
+                    controller.setRule(rule);
+                  }
                 },
+                showCheckmark: false,
                 selectedColor: Colors.blueAccent,
+                backgroundColor: Colors.grey[100],
                 labelStyle: TextStyle(
                   color: isSelected ? Colors.white : Colors.black87,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
-              );
-            }),
-          );
-        }).toList(),
-      ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 }
