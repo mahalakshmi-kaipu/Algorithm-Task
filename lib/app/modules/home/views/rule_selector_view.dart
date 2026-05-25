@@ -15,25 +15,22 @@ class RuleSelectorView extends GetView<HomeController> {
         color: Colors.white,
         border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
       ),
-      child: Obx(() {
-        final currentRule = controller.currentRule.value;
-        return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          itemCount: HighlightRule.values.length,
-          itemBuilder: (context, index) {
-            final rule = HighlightRule.values[index];
-            final isSelected = currentRule == rule;
-            
-            return Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ChoiceChip(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        itemCount: HighlightRule.values.length,
+        itemBuilder: (context, index) {
+          final rule = HighlightRule.values[index];
+          
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Obx(() {
+              final isSelected = controller.currentRule.value == rule;
+              return ChoiceChip(
                 label: Text(getRuleName(rule)),
                 selected: isSelected,
                 onSelected: (selected) {
-                  if (selected) {
-                    controller.setRule(rule);
-                  }
+                  controller.setRule(rule);
                 },
                 showCheckmark: false,
                 selectedColor: Colors.blueAccent,
@@ -45,11 +42,11 @@ class RuleSelectorView extends GetView<HomeController> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-            );
-          },
-        );
-      }),
+              );
+            }),
+          );
+        },
+      ),
     );
   }
 }
